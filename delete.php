@@ -1,12 +1,10 @@
 <?php
-$file = "data.txt";
+include "connect.php";
+
 $id = $_GET['id'];
 
-$rows = file($file);
-
-unset($rows[$id]);
-
-file_put_contents($file, implode("", $rows));
+$stm = $connection->prepare("delete from users where id=?");
+$stm->execute([$id]);
 
 header("Location: list.php");
-exit;
+?>

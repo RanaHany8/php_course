@@ -1,20 +1,18 @@
 <?php
-$file = "data.txt";
+include "connect.php";
+
 $id = $_GET['id'];
 
-$rows = file($file);
-
-if (!isset($rows[$id])) {
-    die("User Not Found");
-}
-
-$data = explode("|", trim($rows[$id]));
+$stm = $connection->prepare("select * from users where id=?");
+$stm->execute([$id]);
+$user = $stm->fetch(PDO::FETCH_ASSOC);
 
 echo "<h2>User Details</h2>";
-echo "Name: $data[0] $data[1] <br>";
-echo "Address: $data[2] <br>";
-echo "Country: $data[3] <br>";
-echo "Gender: $data[4] <br>";
-echo "Skills: $data[5] <br>";
-echo "Username: $data[6] <br>";
-echo "Department: $data[7] <br>";
+echo "Name: {$user['fname']} {$user['lname']} <br>";
+echo "Address: {$user['address']} <br>";
+echo "Country: {$user['country']} <br>";
+echo "Gender: {$user['gender']} <br>";
+echo "Skills: {$user['skills']} <br>";
+echo "Username: {$user['username']} <br>";
+echo "Department: {$user['department']} <br>";
+?>

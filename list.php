@@ -1,116 +1,49 @@
-<?php
-$file = "data.txt";
-
-if (!file_exists($file)) {
-    echo "No Data Found";
-    exit;
-}
-
-$rows = file($file);
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>All Users</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #ffffff;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
 
-        .container {
-            width: 80%;
-            max-width: 1000px;
-            text-align: center;
-        }
-
-        h2 {
-            margin-bottom: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 18px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        th {
-            background: #444;
-            color: white;
-            padding: 12px;
-        }
-
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        tr:hover {
-            background-color: #f5f5f5;
-        }
-
-        a {
-            text-decoration: none;
-            padding: 6px 10px;
-            border-radius: 5px;
-            font-size: 14px;
-            color: white;
-            margin: 0 3px;
-        }
-
-        .view {
-            background: #4CAF50;
-        }
-
-        .delete {
-            background: #f44336;
-        }
-
-        .edit {
-            background: #2196F3;
-        }
-
-        a:hover {
-            opacity: 0.8;
-        }
-    </style>
+  
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+     <a href="registration.php" class="btn btn-success">Add</a>
 </head>
-
 <body>
 
-<div class="container">
-    <h2>All Users</h2>
+<?php
+include "connect.php";
 
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Country</th>
-            <th>Actions</th>
-        </tr>
+$result = $connection->query("SELECT * FROM users");
+?>
 
+<div class="container mt-5">
+    <h2 class="mb-4">All Users</h2>
+
+    <table class="table table-striped table-hover table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Country</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
         <?php
-        foreach ($rows as $index => $row) {
-            $data = explode("|", trim($row));
+        while($row = $result->fetch(PDO::FETCH_ASSOC)){
             echo "<tr>";
-            echo "<td>$index</td>";
-            echo "<td>$data[0] $data[1]</td>";
-            echo "<td>$data[3]</td>";
+            echo "<td>{$row['id']}</td>";
+            echo "<td>{$row['fname']} {$row['lname']}</td>";
+            echo "<td>{$row['country']}</td>";
             echo "<td>
-                    <a class='view' href='view.php?id=$index'>View</a>
-                    <a class='delete' href='delete.php?id=$index'>Delete</a>
-                    <a class='edit' href='edit.php?id=$index'>Edit</a>
-                  </td>";
+                <a class='btn btn-success btn-sm me-1' href='view.php?id={$row['id']}'>View</a>
+                <a class='btn btn-primary btn-sm me-1' href='edit.php?id={$row['id']}'>Edit</a>
+                <a class='btn btn-danger btn-sm' href='delete.php?id={$row['id']}'>Delete</a>
+            </td>";
             echo "</tr>";
         }
         ?>
+        </tbody>
     </table>
 </div>
 
