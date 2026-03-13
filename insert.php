@@ -1,5 +1,6 @@
 <?php
-include "connect.php";
+require_once 'Database.php';
+$connection = Database::getInstance()->getConnection();
 
 if(isset($_POST['verify_code']) && $_POST['verify_code'] == "Sh68Sa"){
 
